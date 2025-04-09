@@ -155,8 +155,42 @@
          </section>
 
         <!-- Calendar -->
-        <iframe src="https://calendar.google.com/calendar/embed?src=lily.otv77%40gmail.com&ctz=Atlantic%2FCape_Verde" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-        <section class="section">
+       <!-- Conteneur où s'afficheront les dates -->
+<div id="client-stay">
+  <p>Chargement des dates...</p>
+</div>
+
+<script>
+async function fetchClientStay() {
+  const apiKey = "AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwII"; 
+  const calendarId = "lily.otv77@gmail.com"; 
+
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${lily.otv77@gmail.com}/events?key=${AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwII}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const clientEvent = data.items[0]; // Ici, on prend le 1er événement (à adapter)
+
+    document.getElementById("client-stay").innerHTML = `
+      <h3>Bonjour ${clientEvent.summary || "Client"} !</h3>
+      <p>Arrivée : ${formatDate(clientEvent.start.date || clientEvent.start.dateTime)}</p>
+      <p>Départ : ${formatDate(clientEvent.end.date || clientEvent.end.dateTime)}</p>
+    `;
+  } catch (error) {
+    document.getElementById("client-stay").innerHTML = "Erreur de chargement. Vérifiez la clé API et l'ID du calendrier.";
+    console.error("Erreur :", error);
+  }
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("fr-FR"); // Format français
+}
+
+fetchClientStay();
+</script>
           
         </section>
 
