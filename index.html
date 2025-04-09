@@ -167,11 +167,13 @@ async function fetchClientStay() {
 
   const url = `https://www.googleapis.com/calendar/v3/calendars/${lily.otv77@gmail.com}/events?key=${AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwII}`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const clientEvent = data.items[0]; // Ici, on prend le 1er événement (à adapter)
+ try {
+  const response = await fetch(url);
+  console.log("Réponse API :", response); 
+  const data = await response.json();
+  console.log("Données :", data); 
+} catch (error) {
+  console.error("Erreur complète :", error); 
 
     document.getElementById("client-stay").innerHTML = `
       <h3>Bonjour ${clientEvent.summary || "Client"} !</h3>
@@ -186,7 +188,7 @@ async function fetchClientStay() {
 
 function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString("fr-FR"); // Format français
+  return date.toLocaleDateString("fr-FR"); 
 }
 
 fetchClientStay();
