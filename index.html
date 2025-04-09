@@ -161,37 +161,44 @@
 </div>
 
 <script>
-async function fetchClientStay() {
-  const apiKey = "AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwII"; 
-  const calendarId = "lily.otv77@gmail.com"; 
+async function fetchEvents() {
+  const CALENDAR_ID = encodeURIComponent(« lily.otv77@gmail.com »); 
+  const API_KEY = "AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwI";
+  
+  const timeMin = new Date().toISOString();
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${lily.otv77@gmail.com}/events?key=${AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwI}&timeMin=${timeMin}&singleEvents=true`;
+  
+  try {
 
-  const url = `https://www.googleapis.com/calendar/v3/calendars/${lily.otv77@gmail.com}/events?key=${AIzaSyDQlQehVsx05RJw8praJuAP59RRItJTlwII}`;
-
- try {
-  const response = await fetch(url);
-  console.log("Réponse API :", response); 
-  const data = await response.json();
-  console.log("Données :", data); 
-} catch (error) {
-  console.error("Erreur complète :", error); 
-
-    document.getElementById("client-stay").innerHTML = `
-      <h3>Bonjour ${clientEvent.summary || "Client"} !</h3>
-      <p>Arrivée : ${formatDate(clientEvent.start.date || clientEvent.start.dateTime)}</p>
-      <p>Départ : ${formatDate(clientEvent.end.date || clientEvent.end.dateTime)}</p>
-    `;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Erreur ${response.status}: ${errorData.error.message}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.items && data.items.length > 0) {
+      const event = data.items[0];
+      document.getElementById("client-stay").innerHTML = `
+        📅 <strong>${event.summary || "Événement sans titre"}</strong><br>
+        🕒 Du ${new Date(event.start.dateTime || event.start.date).toLocaleDateString("fr-FR")}<br>
+        🏁 Au ${new Date(event.end.dateTime || event.end.date).toLocaleDateString("fr-FR")}
+      `;
+    } else {
+      document.getElementById("client-stay").innerHTML = "Aucun événement à venir";
+    }
   } catch (error) {
-    document.getElementById("client-stay").innerHTML = "Erreur de chargement. Vérifiez la clé API et l'ID du calendrier.";
-    console.error("Erreur :", error);
+    console.error("Échec critique:", error);
+    document.getElementById("client-stay").innerHTML = `
+      ❌ Erreur de chargement<br>
+      <small>${error.message}</small>
+    `;
   }
 }
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("fr-FR"); 
-}
-
-fetchClientStay();
+fetchEvents();
 </script>
           
         </section>
