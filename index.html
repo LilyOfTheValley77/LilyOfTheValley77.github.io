@@ -27,6 +27,37 @@
             background: white;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
+        /* Structure principale */
+.contact-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Disposition des boutons */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+/* Style des boutons */
+.btn {
+  flex: 1; /* Prend toute la largeur disponible */
+  text-align: center;
+  padding: 10px 5px;
+  white-space: nowrap;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: row;
+  }
+  .btn {
+    min-width: calc(50% - 5px);
+  }
+}
         /* Hero Banner */
         .hero {
             position: relative;
